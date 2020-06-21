@@ -3,29 +3,29 @@ package com.example.demo.service
 import com.example.demo.data.Person
 import com.example.demo.data.PersonRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.Month
 import java.util.*
 import javax.annotation.PostConstruct
-import javax.transaction.Transactional
 
 @Service
 class PersonService(
         private val repository: PersonRepository
 ) {
 
-    @Transactional
+    @Transactional(readOnly = true)
     fun findAll(): List<Person> {
         return repository.findAll()
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     fun save(person: Person): Person {
         return repository.save(person)
     }
 
     @PostConstruct
-    @Transactional
+    @Transactional(readOnly = false)
     fun populate() {
         if (repository.count() != 0L) {
             return
